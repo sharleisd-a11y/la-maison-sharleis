@@ -1,1 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="theme-color" content="#0A0906"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="description" content="La Maison Sharleis — WE-ILUMINATE LLC — The Accessibility Standard Others Can't Match"/>
+<title>La Maison Sharleis</title>
+<style>
+/* ── RESET ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#0A0906}
+body{font-family:'Arial',sans-serif;color:#E8E0D0;font-size:16px;line-height:1.5}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+a{color:#C8963E;text-decoration:none}
+input,textarea,select{font-family:inherit;font-size:14px}
+img{max-width:100%}
+*:focus-visible{outline:2px solid #C8963E;outline-offset:2px}
 
+/* ── VARIABLES ── */
+:root{
+  --gold:#C8963E;--navy:#0A0E2A;--black:#0A0906;
+  --white:#E8E0D0;--red:#C0444A;--green:#5BAF7A;
+  --gray:#888;--pink:#E91E8C;--cream:#F5F0E8;
+}
+
+/* ── APP SHELL ── */
+#app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;position:relative;overflow:hidden}
+
+/* ── HEADER ── */
+.app-header{background:var(--navy);border-bottom:2px solid var(--gold);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:56px}
+.header-brand{display:flex;align-items:center;gap:10px}
+.header-logo{width:36px;height:36px;object-fit:contain;border-radius:4px}
+.header-logo-placeholder{width:36px;height:36px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy);flex-shrink:0}
+.header-title{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.5px;line-height:1.2}
+.header-sub{font-size:9px;color:var(--gray);letter-spacing:.5px}
+.lock-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(200,150,62,.4);color:var(--gold);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.lock-btn:hover,.lock-btn:focus-visible{background:rgba(200,150,62,.15)}
+.back-indicator{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:1px;text-align:right;line-height:1.2}
+
+/* ── PAGE CONTENT ── */
+.page-wrap{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+.page{display:none;padding:0}
+.page.active{display:block}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--navy);border-top:1px solid rgba(200,150,62,.3);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gray);font-size:9px;font-weight:700;letter-spacing:.5px;transition:color .15s;min-height:56px;justify-content:center}
+.nav-btn.active{color:var(--gold)}
+.nav-btn svg{width:20px;height:20px;fill:currentColor}
+
+/* ── PASSCODE SCREEN ── */
+#passcode-screen{position:fixed;inset:0;background:var(--black);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#passcode-screen.open{display:flex}
+.pc-logo{width:70px;height:70px;object-fit:contain;border-radius:8px;margin-bottom:20px}
+.pc-title{font-size:18px;font-weight:700;color:var(--gold);margin-bottom:4px;letter-spacing:.5px}
+.pc-sub{font-size:12px;color:var(--gray);margin-bottom:28px;text-align:center}
+.pc-dots{display:flex;gap:12px;margin-bottom:28px}
+.pc-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold);background:transparent;transition:background .1s}
+.pc-dot.filled{background:var(--gold)}
+.pc-grid{display:grid;grid-template-columns:repeat(3,72px);gap:12px;margin-bottom:16px}
+.pc-key{width:72px;height:72px;border-radius:50%;border:1px solid rgba(200,150,62,.35);background:var(--navy);color:var(--white);font-size:22px;font-weight:300;display:flex;align-items:center;justify-content:center;transition:background .1s}
+.pc-key:active,.pc-key:focus-visible{background:rgba(200,150,62,.2)}
+.pc-key.del{font-size:16px;color:var(--gray)}
+.pc-key.empty{visibility:hidden}
+.pc-msg{font-size:12px;min-height:18px;color:var(--red);font-weight:700;letter-spacing:.5px}
+.pc-cancel{margin-top:12px;color:var(--gray);font-size:13px;padding:8px 16px}
+
+/* ── HERO ── */
+.hero{padding:24px 16px 20px;background:linear-gradient(180deg,var(--navy) 0%,var(--black) 100%);border-bottom:1px solid rgba(200,150,62,.15)}
+.hero-eyebrow{font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.hero-name{font-size:26px;font-weight:700;color:var(--gold);line-height:1.1;margin-bottom:4px}
+.hero-tag{font-size:13px;color:var(--white);margin-bottom:20px;line-height:1.5;opacity:.85}
+.counter-block{background:rgba(200,150,62,.08);border:1px solid rgba(200,150,62,.25);border-radius:10px;padding:14px;margin-bottom:16px;text-align:center}
+.counter-label{font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.counter-num{font-size:42px;font-weight:700;color:var(--gold);font-family:monospace;line-height:1}
+.counter-sub{font-size:10px;color:var(--gray);margin-top:4px}
+.live-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:4px;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.cta-btn{width:100%;padding:14px;background:var(--gold);color:var(--navy);border-radius:8px;font-size:15px;font-weight:700;letter-spacing:.3px;margin-top:4px}
+.cta-btn:hover,.cta-btn:focus-visible{opacity:.9}
+
+/* ── SECTION ── */
+.section{padding:16px}
+.section+.section{padding-top:0}
+.section-title{font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(200,150,62,.2)}
+
+/* ── CARDS ── */
+.card{background:var(--navy);border:1px solid rgba(200,150,62,.15);border-radius:10px;padding:14px;margin-bottom:10px;position:relative}
+.card-title{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.card-desc{font-size:13px;color:rgba(232,224,208,.75);line-height:1.5;margin-bottom:10px}
+.card-btn{display:inline-block;padding:8px 16px;background:var(--gold);color:var(--navy);border-radius:6px;font-size:13px;font-weight:700}
+.card-btn:focus-visible{outline:2px solid var(--white);outline-offset:2px}
+.card-btn.outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.card-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-bottom:8px;letter-spacing:.5px}
+.badge-gold{background:rgba(200,150,62,.2);color:var(--gold)}
+.badge-green{background:rgba(91,175,122,.2);color:var(--green)}
+.badge-red{background:rgba(192,68,74,.2);color:var(--red)}
+.badge-gray{background:rgba(136,136,136,.2);color:var(--gray)}
+.badge-pink{background:rgba(233,30,140,.2);color:var(--pink)}
+
+/* ── FRAMEWORK CARDS ── */
+.fw-card{background:var(--navy);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:background .15s}
+.fw-card:hover,.fw-card:focus-visible{background:rgba(10,14,42,.6)}
+.fw-card-info{flex:1}
+.fw-card-name{font-size:14px;font-weight:700;color:var(--gold)}
+.fw-card-desc{font-size:11px;color:var(--gray);margin-top:2px}
+.fw-card-arrow{color:var(--gold);font-size:18px;flex-shrink:0}
+
+/* ── INTAKE FORM ── */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:5px;letter-spacing:.3px}
+.form-input{width:100%;background:rgba(10,14,42,.8);border:1px solid rgba(200,150,62,.3);border-radius:6px;color:var(--white);padding:10px 12px;font-size:14px;-webkit-appearance:none}
+.form-input:focus{outline:none;border-color:var(--gold)}
+.form-input::placeholder{color:var(--gray)}
+.form-select{width:100%;background:rgba(10,14,42,.8);border:1px solid rgba(200,150,62,.3);border-radius:6px;color:var(--white);padding:10px 12px;font-size:14px;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C8963E' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.form-textarea{width:100%;background:rgba(10,14,42,.8);border:1px solid rgba(200,150,62,.3);border-radius:6px;color:var(--white);padding:10px 12px;font-size:14px;resize:vertical;min-height:80px}
+.form-textarea:focus{outline:none;border-color:var(--gold)}
+.submit-btn{width:100%;padding:14px;background:var(--gold);color:var(--navy);border-radius:8px;font-size:15px;font-weight:700;margin-top:8px}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.form-msg{font-size:12px;padding:8px 12px;border-radius:6px;margin-top:8px;display:none}
+.form-msg.success{background:rgba(91,175,122,.15);color:var(--green);border:1px solid rgba(91,175,122,.3);display:block}
+.form-msg.error{background:rgba(192,68,74,.15);color:var(--red);border:1px solid rgba(192,68,74,.3);display:block}
+
+/* ── DEADLINE ITEMS ── */
+.deadline-card{border-radius:8px;padding:12px;margin-bottom:8px}
+.deadline-card.urgent{background:rgba(192,68,74,.1);border:1px solid rgba(192,68,74,.3)}
+.deadline-card.soon{background:rgba(200,150,62,.08);border:1px solid rgba(200,150,62,.25)}
+.deadline-card.later{background:rgba(10,14,42,.8);border:1px solid rgba(136,136,136,.2)}
+.deadline-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.deadline-item{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:8px}
+.deadline-item:last-child{border-bottom:none}
+.deadline-name{font-size:13px;color:var(--white);flex:1}
+.deadline-date{font-size:11px;color:var(--gray);white-space:nowrap;font-family:monospace}
+
+/* ── CALENDAR ── */
+.cal-month{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--navy);border-bottom:1px solid rgba(200,150,62,.15)}
+.cal-title{font-size:15px;font-weight:700;color:var(--gold)}
+.cal-nav{padding:8px 12px;color:var(--gold);font-size:18px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:rgba(200,150,62,.1);margin:0}
+.cal-day-header{background:var(--navy);padding:8px 0;text-align:center;font-size:10px;color:var(--gray);font-weight:700}
+.cal-day{background:var(--black);padding:8px 0;text-align:center;font-size:13px;color:var(--white);min-height:40px;cursor:pointer;transition:background .1s;position:relative}
+.cal-day:empty{background:var(--black)}
+.cal-day.today{color:var(--gold);font-weight:700}
+.cal-day.has-event::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.cal-day.other-month{color:rgba(136,136,136,.4)}
+.cal-events{padding:16px}
+.event-item{background:var(--navy);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 12px;margin-bottom:8px}
+.event-date{font-size:10px;color:var(--gray);margin-bottom:2px;font-family:monospace}
+.event-name{font-size:14px;font-weight:700;color:var(--white)}
+.event-desc{font-size:12px;color:var(--gray);margin-top:3px}
+
+/* ── BACK ADMIN ── */
+.admin-section{padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.1)}
+.admin-title{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.doc-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.doc-item:last-child{border-bottom:none}
+.doc-name{font-size:13px;color:var(--white)}
+.doc-code{font-size:10px;color:var(--gray);font-family:monospace;margin-top:1px}
+.locked-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(192,68,74,.2);color:var(--red);letter-spacing:.5px;white-space:nowrap}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.toggle-label{font-size:13px;color:var(--white)}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(136,136,136,.3);border-radius:24px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:var(--gray);border-radius:50%;transition:.2s}
+.toggle input:checked+.toggle-slider{background:rgba(200,150,62,.4)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:var(--gold)}
+.stripe-locked{background:rgba(136,136,136,.1);border:1px solid rgba(136,136,136,.2);border-radius:8px;padding:14px;text-align:center}
+.stripe-locked-title{font-size:13px;color:var(--gray);margin-bottom:4px}
+.stripe-locked-note{font-size:11px;color:rgba(136,136,136,.6);line-height:1.5}
+
+/* ── SYSTEM ── */
+.endpoint-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.endpoint-label{font-size:11px;color:var(--gold);font-weight:700;margin-bottom:4px}
+.endpoint-input{flex:1;background:rgba(10,14,42,.8);border:1px solid rgba(200,150,62,.3);border-radius:6px;color:var(--gold);padding:8px 10px;font-size:11px;font-family:monospace}
+.endpoint-save{padding:8px 14px;background:rgba(200,150,62,.15);color:var(--gold);border:1px solid rgba(200,150,62,.4);border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap}
+.version-note{font-size:11px;color:var(--gray);line-height:1.7;padding:14px;background:rgba(10,14,42,.5);border-radius:8px;margin-top:8px}
+
+/* ── MODAL / DETAIL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,9,6,.97);z-index:300;display:none;flex-direction:column;max-width:430px;left:50%;transform:translateX(-50%)}
+.modal-overlay.open{display:flex}
+.modal-header{background:var(--navy);border-bottom:1px solid rgba(200,150,62,.2);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.modal-back{color:var(--gold);font-size:22px;padding:4px;line-height:1}
+.modal-title{font-size:15px;font-weight:700;color:var(--gold)}
+.modal-body{flex:1;overflow-y:auto;padding:16px;padding-bottom:40px}
+
+/* ── STATUS BAR ── */
+.status-bar{display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(91,175,122,.06);border-bottom:1px solid rgba(91,175,122,.15);font-size:10px;color:var(--green);font-weight:700;letter-spacing:.5px;flex-shrink:0}
+
+/* ── FOOTER ── */
+.app-footer{padding:16px;background:var(--navy);border-top:1px solid rgba(200,150,62,.15);text-align:center;font-size:10px;color:var(--gray);line-height:1.8}
+.app-footer a{color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(min-width:430px){
+  #app,#passcode-screen,.modal-overlay,.bottom-nav{box-shadow:0 0 40px rgba(0,0,0,.8)}
+}
+</style>
+</head>
+<body>
+
+<!-- PASSCODE SCREEN -->
+<div id="passcode-screen" role="dialog" aria-modal="true" aria-label="Private entry passcode">
+  <img src="logo.png" alt="WE-ILUMINATE LLC" class="pc-logo" onerror="this.style.display='none'"/>
+  <div class="pc-title">La Maison Sharleis</div>
+  <div class="pc-sub">Private Entry — Enter Passcode</div>
+  <div class="pc-dots" id="pc-dots" aria-live="polite" aria-label="Passcode entry progress">
+    <div class="pc-dot" id="d0"></div>
+    <div class="pc-dot" id="d1"></div>
+    <div class="pc-dot" id="d2"></div>
+    <div class="pc-dot" id="d3"></div>
+    <div class="pc-dot" id="d4"></div>
+    <div class="pc-dot" id="d5"></div>
+  </div>
+  <div class="pc-grid" role="group" aria-label="Number pad">
+    <button class="pc-key" onclick="pcKey('1')" aria-label="1">1</button>
+    <button class="pc-key" onclick="pcKey('2')" aria-label="2">2</button>
+    <button class="pc-key" onclick="pcKey('3')" aria-label="3">3</button>
+    <button class="pc-key" onclick="pcKey('4')" aria-label="4">4</button>
+    <button class="pc-key" onclick="pcKey('5')" aria-label="5">5</button>
+    <button class="pc-key" onclick="pcKey('6')" aria-label="6">6</button>
+    <button class="pc-key" onclick="pcKey('7')" aria-label="7">7</button>
+    <button class="pc-key" onclick="pcKey('8')" aria-label="8">8</button>
+    <button class="pc-key" onclick="pcKey('9')" aria-label="9">9</button>
+    <button class="pc-key empty" aria-hidden="true"></button>
+    <button class="pc-key" onclick="pcKey('0')" aria-label="0">0</button>
+    <button class="pc-key del" onclick="pcDel()" aria-label="Delete">⌫</button>
+  </div>
+  <div class="pc-msg" id="pc-msg" role="alert"></div>
+  <button class="pc-cancel" onclick="closePc()">Cancel</button>
+</div>
+
+<!-- FRAMEWORK DETAIL MODAL -->
+<div class="modal-overlay" id="fw-modal" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <button class="modal-back" onclick="closeModal('fw-modal')" aria-label="Go back">‹</button>
+    <div class="modal-title" id="fw-modal-title"></div>
+  </div>
+  <div class="modal-body" id="fw-modal-body"></div>
+</div>
+
+<!-- INTAKE FORM MODAL -->
+<div class="modal-overlay" id="intake-modal" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <button class="modal-back" onclick="closeModal('intake-modal')" aria-label="Go back">‹</button>
+    <div class="modal-title">Begin Your Consultation</div>
+  </div>
+  <div class="modal-body">
+    <p style="font-size:13px;color:var(--gray);margin-bottom:16px;line-height:1.6">Complete this form to begin your consultation with WE-ILUMINATE LLC. You will receive a response within 2 business days.</p>
+    <form id="intake-form" onsubmit="submitIntake(event)">
+      <div class="form-group">
+        <label class="form-label" for="f-name">Full Name *</label>
+        <input class="form-input" id="f-name" name="name" type="text" required placeholder="Your full name" autocomplete="name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-org">Organization</label>
+        <input class="form-input" id="f-org" name="organization" type="text" placeholder="Organization or company name" autocomplete="organization"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-email">Email Address *</label>
+        <input class="form-input" id="f-email" name="email" type="email" required placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-phone">Phone Number</label>
+        <input class="form-input" id="f-phone" name="phone" type="tel" placeholder="(000) 000-0000" autocomplete="tel"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-service">Service of Interest *</label>
+        <select class="form-select" id="f-service" name="service" required>
+          <option value="" disabled selected>Select a framework</option>
+          <option>SPECTRUM — Physical and Digital Accessibility Audits</option>
+          <option>PRISM — Organizational Inclusion Consulting</option>
+          <option>ILLUMINATE — Staff Education and Curriculum</option>
+          <option>RADIANCE™ — Events and Public Access</option>
+          <option>LUMEN Protocol — Global Accessibility Engagement</option>
+          <option>Aperture — Accessibility Review</option>
+          <option>General Inquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-desc">Project Description *</label>
+        <textarea class="form-textarea" id="f-desc" name="description" required placeholder="Tell me about your project, organization, and what you need..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-timeline">Timeline</label>
+        <input class="form-input" id="f-timeline" name="timeline" type="text" placeholder="When do you need this completed?"/>
+      </div>
+      <button class="submit-btn" type="submit" id="intake-submit">Send Consultation Request</button>
+      <div class="form-msg" id="intake-msg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- WAYFI DETAIL MODAL -->
+<div class="modal-overlay" id="wayfi-modal" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <button class="modal-back" onclick="closeModal('wayfi-modal')" aria-label="Go back">‹</button>
+    <div class="modal-title">The Wayfi Project</div>
+  </div>
+  <div class="modal-body">
+    <p style="font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.6">A therapeutic intervention system that reaches people at the point where they need to know they matter.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="card"><div class="card-title">🥚 The Egg</div><div class="card-desc">A physical egg containing a magical friend — Wayfi Charles Williams, a low-vision fox born November 11, 2026 in Washington DC.</div></div>
+      <div class="card"><div class="card-title">📄 The File</div><div class="card-desc">A personalized birth file matching the friend's disabilities to the recipient. Every child sees themselves represented.</div></div>
+      <div class="card"><div class="card-title">🧺 The Basket</div><div class="card-desc">Curated physical items addressing the recipient's specific accessibility needs.</div></div>
+      <div class="card"><div class="card-title">💻 The Code</div><div class="card-desc">A private communication system and virtual companion experience.</div></div>
+      <div class="card"><div class="card-title">🌍 The World</div><div class="card-desc">An age-restricted community network — the data collection layer and connection point.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- HEADER -->
+  <header class="app-header" role="banner">
+    <div class="header-brand">
+      <img src="logo.png" alt="WE-ILUMINATE LLC logo" class="header-logo" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+      <div class="header-logo-placeholder" id="logo-fallback" style="display:none" aria-hidden="true">WI</div>
+      <div>
+        <div class="header-title">La Maison Sharleis</div>
+        <div class="header-sub">WE-ILUMINATE LLC</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+      <button class="lock-btn" id="lock-btn" onclick="toggleLock()" aria-label="Toggle private access">🔒</button>
+      <div class="back-indicator" id="back-indicator" style="display:none">PRIVATE MODE</div>
+    </div>
+  </header>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar" id="status-bar" aria-live="polite">
+    <span class="live-dot" aria-hidden="true"></span>
+    <span id="status-msg">Connecting to live database…</span>
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-wrap" id="page-wrap" role="main">
+
+    <!-- ═══ FRONT PAGES ═══ -->
+
+    <!-- HOME -->
+    <div class="page active" id="page-home" aria-label="Home">
+      <div class="hero">
+        <div class="hero-eyebrow">Founded August 4, 2025 · Washington DC</div>
+        <div class="hero-name">Sharleis L. Dunn</div>
+        <div class="hero-tag">The Accessibility Standard Others Can't Match</div>
+        <div class="counter-block" aria-live="polite">
+          <div class="counter-label"><span class="live-dot" aria-hidden="true"></span>Total Documented Lives</div>
+          <div class="counter-num" id="counter-num" aria-label="Total documented lives counter">—</div>
+          <div class="counter-sub">The Human Cost · Aug 31 1997 – Present</div>
+        </div>
+        <button class="cta-btn" onclick="openIntake()" aria-label="Begin a consultation with Sharleis">Work With Sharleis</button>
+      </div>
+
+      <div class="section">
+        <div class="section-title">What We Do</div>
+        <div class="card">
+          <div class="card-badge badge-gold">ACCESSIBILITY CONSULTING</div>
+          <div class="card-title">The Complete Wayfinder System™</div>
+          <div class="card-desc">Five proprietary frameworks covering every dimension of accessibility — physical, digital, organizational, educational, and global. We do not check boxes. We build access.</div>
+          <button class="card-btn" onclick="switchTab('wei')" aria-label="View all frameworks">View Frameworks</button>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gold">GLOBAL ACCOUNTABILITY</div>
+          <div class="card-title">The Human Cost</div>
+          <div class="card-desc">A live database of documented unnatural deaths worldwide — from Princess Diana through today. Every name. Every person. Every life.</div>
+          <button class="card-btn outline" onclick="switchTab('projects')" aria-label="Open The Human Cost database">Open The Map</button>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gold">THE SHARLEIS SAGA</div>
+          <div class="card-title">Author · Creator · Storyteller</div>
+          <div class="card-desc">Gold Edit. Kidz Corner. Chronically Fabulous. The Eye of Time trilogy. Publishing, content, and brand — all in one ecosystem.</div>
+          <button class="card-btn outline" onclick="switchTab('brand')" aria-label="View The Sharleis Saga">Explore</button>
+        </div>
+      </div>
+
+      <div class="app-footer">
+        <div>© 2026 WE-ILUMINATE LLC</div>
+        <div><a href="mailto:SharleisDunn@outlook.com">SharleisDunn@outlook.com</a></div>
+        <div><a href="https://we-iluminatellc.com">we-iluminatellc.com</a></div>
+        <div>1930 18th Street NW Suite B3 PMB 2064 · Washington DC 20009</div>
+        <div style="margin-top:8px;color:#555">XOXO — Shar 💋</div>
+      </div>
+    </div>
+
+    <!-- WEI -->
+    <div class="page" id="page-wei" aria-label="WE-ILUMINATE LLC">
+      <div style="background:var(--navy);padding:16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Accessibility Consulting Firm</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold);margin-bottom:4px">WE-ILUMINATE LLC</div>
+        <div style="font-size:12px;color:var(--white);opacity:.8;line-height:1.5">With 20/700 visual acuity and a lifetime navigating systems not built for everyone, Sharleis brings credentials and lived experience most accessibility professionals cannot offer simultaneously.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The Complete Wayfinder System™</div>
+        <button class="fw-card" onclick="openFW('spectrum')" aria-label="Learn about SPECTRUM framework">
+          <div class="fw-card-info">
+            <div class="fw-card-name">SPECTRUM</div>
+            <div class="fw-card-desc">Physical and Digital Accessibility Audits</div>
+          </div>
+          <span class="fw-card-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="fw-card" onclick="openFW('prism')" aria-label="Learn about PRISM framework">
+          <div class="fw-card-info">
+            <div class="fw-card-name">PRISM</div>
+            <div class="fw-card-desc">Organizational Inclusion Consulting</div>
+          </div>
+          <span class="fw-card-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="fw-card" onclick="openFW('illuminate')" aria-label="Learn about ILLUMINATE framework">
+          <div class="fw-card-info">
+            <div class="fw-card-name">ILLUMINATE</div>
+            <div class="fw-card-desc">Staff Education and Curriculum Development</div>
+          </div>
+          <span class="fw-card-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="fw-card" onclick="openFW('radiance')" aria-label="Learn about RADIANCE framework">
+          <div class="fw-card-info">
+            <div class="fw-card-name">RADIANCE™</div>
+            <div class="fw-card-desc">Events and Public Access Consulting</div>
+          </div>
+          <span class="fw-card-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="fw-card" style="border-left-color:#5BAF7A" onclick="openFW('lumen')" aria-label="Learn about LUMEN Protocol framework">
+          <div class="fw-card-info">
+            <div class="fw-card-name" style="color:var(--green)">LUMEN Protocol</div>
+            <div class="fw-card-desc">Global Accessibility and Government Engagement</div>
+          </div>
+          <span class="fw-card-arrow" style="color:var(--green)" aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="section-title">Aperture — Accessibility Reviews</div>
+        <div class="card">
+          <div class="card-badge badge-gold">PUBLIC REVIEW PORTAL</div>
+          <div class="card-title">Verified Accessibility Assessments</div>
+          <div class="card-desc">Published reviews across all five frameworks. Only reviews marked for public release appear here. All assessments conducted by Sharleis L. Dunn.</div>
+          <div id="aperture-reviews" style="margin-top:10px">
+            <div style="font-size:12px;color:var(--gray);font-style:italic">Loading published reviews…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="section-title">SENSE-ABLE™</div>
+        <div class="card">
+          <div class="card-desc">Nine-point multi-sensory product description framework — making every product accessible to every perception.</div>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <button class="submit-btn" onclick="openIntake()" aria-label="Request a consultation">Request a Consultation</button>
+      </div>
+    </div>
+
+    <!-- BRAND -->
+    <div class="page" id="page-brand" aria-label="The Sharleis Saga">
+      <div style="background:var(--navy);padding:16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Personal Brand</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">The Sharleis Saga</div>
+        <div style="font-size:12px;color:var(--white);opacity:.8;margin-top:4px">Author · Content Creator · Storyteller</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Sub-Brands</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="font-size:16px">Gold Edit</div>
+            <div class="card-desc" style="font-size:11px">Lifestyle · Wellness · Living with intention</div>
+            <a href="https://thegoldedit.com" class="card-btn" style="font-size:11px;padding:6px 10px;display:inline-block;margin-top:4px" target="_blank" rel="noopener">Visit</a>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="font-size:16px">Kidz Corner</div>
+            <div class="card-desc" style="font-size:11px">Children's content · Representation · Joy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="section-title">Published and Coming Soon</div>
+        <div class="card">
+          <div class="card-badge badge-gray">COMING SOON</div>
+          <div class="card-title">Chronically Fabulous</div>
+          <div class="card-desc">A Disabled Girl's Guide to Groceries, Glow-Ups and Getting By — a complete meal planning and lifestyle book.</div>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gray">COMING SOON</div>
+          <div class="card-title">Knowing Your Name — Volume I</div>
+          <div class="card-desc">The Mirror — a personal narrative exploring identity, visibility, and self-recognition.</div>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gray">COMING SOON</div>
+          <div class="card-title">Gold Edit Lookbook Diary — Issue Zero</div>
+          <div class="card-desc">The founding issue of the Gold Edit visual journal.</div>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-pink">IN PROGRESS</div>
+          <div class="card-title">The Eye of Time — Trilogy</div>
+          <div class="card-desc">Literary fiction. Protagonist Solène Vael (Sol). 23 chapters mapped. "They spent a long time trying to make me see myself the way they needed me to. I am still learning what I actually look like."</div>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="section-title">Latest Updates</div>
+        <div id="updates-feed">
+          <div class="card">
+            <div class="event-date">September 6, 2026</div>
+            <div class="card-title">S-03 Founder Update</div>
+            <div class="card-desc">Black Hole Moments, Broken Documents and a Map That Matters — <a href="https://canva.link/5ftegn16v25mrku" target="_blank" rel="noopener">Read update</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="page" id="page-projects" aria-label="Active Projects">
+      <div style="background:var(--navy);padding:16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Active Initiatives</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">Projects</div>
+      </div>
+
+      <div class="section">
+        <div class="card">
+          <div class="card-badge badge-red">LIVE</div>
+          <div class="card-title">The Human Cost</div>
+          <div class="card-desc">Every name. Every person. Every life. A global database of documented unnatural deaths from Princess Diana through today — updating daily.</div>
+          <button class="card-btn" onclick="openHumanCost()" aria-label="Open The Human Cost database">Open The Database</button>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gold">ACTIVE</div>
+          <div class="card-title">The Wayfi Project</div>
+          <div class="card-desc">A therapeutic intervention system reaching people at the point of greatest need.</div>
+          <button class="card-btn outline" onclick="openModal('wayfi-modal')" aria-label="Learn about Wayfi">Learn More</button>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gold">ACTIVE</div>
+          <div class="card-title">The Holiday Wayfinder</div>
+          <div class="card-desc">Accessible holiday travel initiative. Departing Fayetteville AR — October 25, 2026.</div>
+          <button class="card-btn outline" onclick="openIntake()" aria-label="Partner with Holiday Wayfinder">Partner With Us</button>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gold">ACTIVE</div>
+          <div class="card-title">Lett's Dance LLC</div>
+          <div class="card-desc">You don't need perfect sight to find your rhythm. Wilette M. Williams — four service frameworks including The Rhythm Room™ and The Illuminated Floor™.</div>
+        </div>
+        <div class="card">
+          <div class="card-badge badge-gray">L'HÉRITAGE DE SHARLEIS</div>
+          <div class="card-title">Twelve-Sector Ecosystem</div>
+          <div class="card-desc">La Maison Sharleis governance structure — fifty frameworks for an accessible world across twelve sectors.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="page" id="page-calendar" aria-label="Public Calendar">
+      <div style="background:var(--navy);padding:16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Public Schedule</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">Calendar</div>
+      </div>
+      <div id="calendar-container"></div>
+    </div>
+
+    <!-- ═══ BACK PAGES ═══ -->
+
+    <!-- BACK: DASHBOARD -->
+    <div class="page" id="page-back-dash" aria-label="Private Dashboard">
+      <div style="background:rgba(200,150,62,.08);padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Private</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">Command Center</div>
+      </div>
+
+      <div style="padding:14px 16px">
+        <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Active Deadlines</div>
+
+        <div class="deadline-card urgent">
+          <div class="deadline-label" style="color:var(--red)">🔴 Urgent — This Week</div>
+          <div class="deadline-item">
+            <div class="deadline-name">Benefits Counselor Consultation</div>
+            <div class="deadline-date">Sep 30, 2026</div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-name">Hallsville Bobcat Belles — Check Status</div>
+            <div class="deadline-date">Sep 15, 2026</div>
+          </div>
+        </div>
+
+        <div class="deadline-card soon">
+          <div class="deadline-label" style="color:var(--gold)">🟡 This Month</div>
+          <div class="deadline-item">
+            <div class="deadline-name">MyTax.DC.gov Entity Classification</div>
+            <div class="deadline-date">Oct 1, 2026</div>
+          </div>
+        </div>
+
+        <div class="deadline-card later">
+          <div class="deadline-label" style="color:var(--gray)">⚪ This Quarter</div>
+          <div class="deadline-item">
+            <div class="deadline-name">DHS Trusted Tester Exam</div>
+            <div class="deadline-date">Dec 22, 2026</div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-name">SAM.gov Registration</div>
+            <div class="deadline-date">Dec 31, 2026</div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-name">Access Almanac Volume One</div>
+            <div class="deadline-date">Dec 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 16px 14px">
+        <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Pipeline Status</div>
+        <div class="card">
+          <div class="card-title">The Human Cost Pipeline</div>
+          <div id="pipeline-status" style="font-size:12px;color:var(--gray);margin-top:4px">Checking pipeline status…</div>
+          <div style="font-size:11px;color:var(--gray);margin-top:6px">Daily pipeline via GitHub Actions — updates humanCostDatabase.json automatically at 6 AM UTC</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK: WEI ADMIN -->
+    <div class="page" id="page-back-wei" aria-label="WEI Admin">
+      <div style="background:rgba(200,150,62,.08);padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Private</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">WEI Admin</div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Aperture — Submit New Review</div>
+        <form id="aperture-form" onsubmit="submitAperture(event)">
+          <div class="form-group">
+            <label class="form-label" for="ap-framework">Framework</label>
+            <select class="form-select" id="ap-framework" name="framework">
+              <option>SPECTRUM</option><option>PRISM</option><option>ILLUMINATE</option>
+              <option>RADIANCE</option><option>LUMEN Protocol</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ap-location">Location Name</label>
+            <input class="form-input" id="ap-location" name="location" type="text" placeholder="Business or venue name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ap-date">Review Date</label>
+            <input class="form-input" id="ap-date" name="date" type="date"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ap-rating">Overall Rating</label>
+            <select class="form-select" id="ap-rating" name="rating">
+              <option>Fully Accessible</option>
+              <option>Partially Accessible</option>
+              <option>Barriers Identified</option>
+              <option>Critical Failures</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ap-summary">Summary</label>
+            <textarea class="form-textarea" id="ap-summary" name="summary" placeholder="Brief overview of findings…"></textarea>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Mark as Public</span>
+            <label class="toggle" aria-label="Toggle public visibility">
+              <input type="checkbox" id="ap-public" name="public"/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="submit-btn" type="submit">Save Review</button>
+          <div class="form-msg" id="aperture-msg"></div>
+        </form>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Document Vault — Attorney-Flagged</div>
+        <div id="doc-vault">
+          <div class="doc-item">
+            <div><div class="doc-name">Bylaws</div><div class="doc-code">WEI-GOV-01</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+          <div class="doc-item">
+            <div><div class="doc-name">Conflict of Interest Policy</div><div class="doc-code">WEI-GOV-03</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+          <div class="doc-item">
+            <div><div class="doc-name">Succession Plan</div><div class="doc-code">WEI-GOV-04</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+          <div class="doc-item">
+            <div><div class="doc-name">Licensing Agreement</div><div class="doc-code">WEI-MINT-04</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+          <div class="doc-item">
+            <div><div class="doc-name">Service Agreement</div><div class="doc-code">WEI-BIZ-06</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+          <div class="doc-item">
+            <div><div class="doc-name">Collaboration Agreement</div><div class="doc-code">WEI-PART-02</div></div>
+            <span class="locked-badge">ATTORNEY REVIEW</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Stripe Payment Portal</div>
+        <div class="stripe-locked">
+          <div class="stripe-locked-title">🔒 Inactive — Do Not Activate</div>
+          <div class="stripe-locked-note">Activate ONLY after benefits counselor consultation is complete.<br/>Deadline: September 30, 2026.<br/>Premature activation may affect SSI benefits.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK: BRAND ADMIN -->
+    <div class="page" id="page-back-brand" aria-label="Brand Admin">
+      <div style="background:rgba(200,150,62,.08);padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Private</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">Brand Admin</div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Publishing Status</div>
+        <div class="doc-item"><div><div class="doc-name">Chronically Fabulous</div><div class="doc-code">Complete manuscript · Pending release</div></div><span class="card-badge badge-gray" style="margin:0;white-space:nowrap">READY</span></div>
+        <div class="doc-item"><div><div class="doc-name">Knowing Your Name Vol. I</div><div class="doc-code">The Mirror section · In progress</div></div><span class="card-badge badge-pink" style="margin:0;white-space:nowrap">IN PROGRESS</span></div>
+        <div class="doc-item"><div><div class="doc-name">Gold Edit Lookbook Issue Zero</div><div class="doc-code">Pending design build</div></div><span class="card-badge badge-gray" style="margin:0;white-space:nowrap">PENDING</span></div>
+        <div class="doc-item"><div><div class="doc-name">The Eye of Time — Trilogy</div><div class="doc-code">23 chapters mapped · 2 chapters drafted</div></div><span class="card-badge badge-pink" style="margin:0;white-space:nowrap">IN PROGRESS</span></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Vogue Pitch Status</div>
+        <div class="card">
+          <div class="card-title">The Wayfinder Edit</div>
+          <div class="card-desc" style="font-size:12px">8 columns/year · $65,000 proposed annual rate · Pitched to Chloe Malle, Head of Editorial Content, Condé Nast</div>
+          <div style="font-size:12px;color:var(--gray);margin-top:6px">Status: Pending response — follow up as needed</div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Social Platforms</div>
+        <div class="doc-item"><div class="doc-name">LinkedIn</div><a href="https://www.linkedin.com/in/sharleis-dunn-15713a432" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+        <div class="doc-item"><div class="doc-name">Facebook</div><a href="https://www.facebook.com/share/19ULVkS1u6/" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+        <div class="doc-item"><div class="doc-name">thegoldedit.com</div><a href="https://thegoldedit.com" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+        <div class="doc-item"><div class="doc-name">thesharleissaga.com</div><a href="https://thesharleissaga.com" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+        <div class="doc-item"><div class="doc-name">we-iluminatellc.com</div><a href="https://we-iluminatellc.com" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+        <div class="doc-item"><div class="doc-name">WEI Updates Live</div><a href="https://we-iluminatellc.com/updates" style="font-size:11px;color:var(--gold)" target="_blank" rel="noopener">Open</a></div>
+      </div>
+    </div>
+
+    <!-- BACK: PROJECTS ADMIN -->
+    <div class="page" id="page-back-projects" aria-label="Projects Admin">
+      <div style="background:rgba(200,150,62,.08);padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Private</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">Projects Admin</div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">The Human Cost</div>
+        <div class="card">
+          <div id="hc-admin-status" style="font-size:13px;color:var(--white)">Loading database status…</div>
+          <div style="font-size:11px;color:var(--gray);margin-top:6px;line-height:1.6">
+            GitHub: <a href="https://github.com/sharleisd-a11y/la-maison-sharleis" target="_blank" rel="noopener" style="font-size:11px">sharleisd-a11y</a><br/>
+            Pipeline: Daily at 6 AM UTC via GitHub Actions
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Elevation Through Illumination Tour</div>
+        <div class="doc-item"><div><div class="doc-name">City 1 — Boston MA</div><div class="doc-code">August 8–28, 2026</div></div><span class="card-badge badge-green" style="margin:0">MAPPED</span></div>
+        <div class="doc-item"><div><div class="doc-name">Cities 2–12</div><div class="doc-code">Aug 2026 – Aug 2027</div></div><span class="card-badge badge-gray" style="margin:0">PLANNING</span></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Holiday Wayfinder</div>
+        <div class="doc-item"><div class="doc-name">Depart Fayetteville AR</div><div class="doc-code" style="font-size:11px;color:var(--gray)">October 25, 2026</div></div>
+        <div class="doc-item"><div class="doc-name">Arrive Marshall TX</div><div class="doc-code" style="font-size:11px;color:var(--gray)">November 1, 2026</div></div>
+        <div class="doc-item"><div class="doc-name">Return Route</div><div class="doc-code" style="font-size:11px;color:var(--gray)">January 11–13, 2027</div></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">L'Héritage de Sharleis</div>
+        <div class="doc-item"><div class="doc-name">La Maison Governance Ledger</div><div class="doc-code" style="font-size:11px;color:var(--gray)">25 tabs · 12 sectors</div></div>
+        <div class="doc-item"><div class="doc-name">Method Volume One</div><div class="doc-code" style="font-size:11px;color:var(--gray)">56 pages · 50 frameworks · Complete</div></div>
+        <div class="doc-item"><div class="doc-name">DC Relocation Plan</div><div class="doc-code" style="font-size:11px;color:var(--gray)">Five-year timeline · Target: ~2031</div></div>
+      </div>
+    </div>
+
+    <!-- BACK: SYSTEM -->
+    <div class="page" id="page-back-system" aria-label="System Settings">
+      <div style="background:rgba(200,150,62,.08);padding:14px 16px;border-bottom:1px solid rgba(200,150,62,.2)">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Private</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">System</div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Change Passcode</div>
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label" for="pc-new">New 6-Digit Passcode</label>
+          <input class="form-input" id="pc-new" type="password" maxlength="6" inputmode="numeric" placeholder="Enter new passcode" autocomplete="new-password"/>
+        </div>
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label" for="pc-confirm">Confirm Passcode</label>
+          <input class="form-input" id="pc-confirm" type="password" maxlength="6" inputmode="numeric" placeholder="Confirm new passcode" autocomplete="new-password"/>
+        </div>
+        <button class="submit-btn" onclick="changePasscode()" style="padding:10px">Save New Passcode</button>
+        <div class="form-msg" id="pc-change-msg"></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-title">Live Data Endpoints</div>
+        <div class="form-group">
+          <div class="endpoint-label">Human Cost Database (GitHub Raw JSON)</div>
+          <div class="endpoint-row">
+            <input class="endpoint-input" id="ep-hc" type="url" placeholder="https://raw.githubusercontent.com/…/humanCostDatabase.json"/>
+            <button class="endpoint-save" onclick="saveEndpoint('hc')">Save</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="endpoint-label">Public Calendar (Google Sheet CSV)</div>
+          <div class="endpoint-row">
+            <input class="endpoint-input" id="ep-cal" type="url" placeholder="https://docs.google.com/spreadsheets/…/export?format=csv"/>
+            <button class="endpoint-save" onclick="saveEndpoint('cal')">Save</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="endpoint-label">Aperture Reviews (Google Sheet CSV)</div>
+          <div class="endpoint-row">
+            <input class="endpoint-input" id="ep-apt" type="url" placeholder="https://docs.google.com/spreadsheets/…/export?format=csv"/>
+            <button class="endpoint-save" onclick="saveEndpoint('apt')">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="version-note">
+          <strong style="color:var(--gold)">La Maison Sharleis</strong><br/>
+          Version 1.0 · September 14, 2026<br/>
+          Built for Sharleis L. Dunn<br/>
+          WE-ILUMINATE LLC · Washington DC<br/>
+          SharleisDunn@outlook.com<br/>
+          <br/>
+          XOXO — Shar 💋
+        </div>
+      </div>
+    </div>
+
+  </main><!-- end page-wrap -->
+
+  <!-- BOTTOM NAV — FRONT -->
+  <nav class="bottom-nav" id="front-nav" aria-label="Main navigation">
+    <button class="nav-btn active" id="nav-home" onclick="switchTab('home')" aria-label="Home" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      HOME
+    </button>
+    <button class="nav-btn" id="nav-wei" onclick="switchTab('wei')" aria-label="WE-ILUMINATE LLC">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      WEI
+    </button>
+    <button class="nav-btn" id="nav-brand" onclick="switchTab('brand')" aria-label="The Sharleis Saga brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 100 10A5 5 0 0012 2zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+      BRAND
+    </button>
+    <button class="nav-btn" id="nav-projects" onclick="switchTab('projects')" aria-label="Active projects">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+      PROJECTS
+    </button>
+    <button class="nav-btn" id="nav-calendar" onclick="switchTab('calendar')" aria-label="Public calendar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+      CALENDAR
+    </button>
+  </nav>
+
+  <!-- BOTTOM NAV — BACK -->
+  <nav class="bottom-nav" id="back-nav" style="display:none" aria-label="Private navigation">
+    <button class="nav-btn active" id="nav-back-dash" onclick="switchBackTab('dash')" aria-label="Command center dashboard" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      DASH
+    </button>
+    <button class="nav-btn" id="nav-back-wei" onclick="switchBackTab('wei')" aria-label="WEI admin">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      WEI
+    </button>
+    <button class="nav-btn" id="nav-back-brand" onclick="switchBackTab('brand')" aria-label="Brand admin">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 100 10A5 5 0 0012 2zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+      BRAND
+    </button>
+    <button class="nav-btn" id="nav-back-projects" onclick="switchBackTab('projects')" aria-label="Projects admin">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/></svg>
+      PROJECTS
+    </button>
+    <button class="nav-btn" id="nav-back-system" onclick="switchBackTab('system')" aria-label="System settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.07 7.07 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.476.476 0 00-.59.22L2.74 8.87a.47.47 0 00.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.47.47 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 00-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>
+      SYSTEM
+    </button>
+  </nav>
+
+</div><!-- end app -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// LA MAISON SHARLEIS — WE-ILUMINATE LLC
+// Built September 14, 2026 for Sharleis L. Dunn
+// ═══════════════════════════════════════════════════════
+
+// ── STORAGE HELPERS ──────────────────────────────────────
+const store = {
+  get: k => { try { return localStorage.getItem(k); } catch { return null; } },
+  set: (k,v) => { try { localStorage.setItem(k,v); } catch {} },
+};
+
+// ── PASSCODE ─────────────────────────────────────────────
+// DEFAULT: 000000 — change in System tab
+let PC = store.get('lms_pc') || '000000';
+let pcEntry = '';
+let isBack = false;
+
+function toggleLock() {
+  if (isBack) { exitBack(); return; }
+  document.getElementById('passcode-screen').classList.add('open');
+  document.getElementById('passcode-screen').querySelector('.pc-key').focus();
+}
+function closePc() {
+  document.getElementById('passcode-screen').classList.remove('open');
+  pcEntry = '';
+  updateDots();
+  document.getElementById('pc-msg').textContent = '';
+}
+function pcKey(k) {
+  if (pcEntry.length >= 6) return;
+  pcEntry += k;
+  updateDots();
+  if (pcEntry.length === 6) setTimeout(checkPc, 100);
+}
+function pcDel() {
+  pcEntry = pcEntry.slice(0,-1);
+  updateDots();
+  document.getElementById('pc-msg').textContent = '';
+}
+function updateDots() {
+  for (let i = 0; i < 6; i++) {
+    document.getElementById('d'+i).classList.toggle('filled', i < pcEntry.length);
+  }
+}
+function checkPc() {
+  if (pcEntry === PC) {
+    closePc();
+    enterBack();
+  } else {
+    document.getElementById('pc-msg').textContent = 'INCORRECT — TRY AGAIN';
+    pcEntry = '';
+    updateDots();
+    setTimeout(() => document.getElementById('pc-msg').textContent = '', 2000);
+  }
+}
+function enterBack() {
+  isBack = true;
+  document.getElementById('front-nav').style.display = 'none';
+  document.getElementById('back-nav').style.display = 'flex';
+  document.getElementById('lock-btn').textContent = '🔓';
+  document.getElementById('back-indicator').style.display = 'block';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-back-dash').classList.add('active');
+  document.querySelectorAll('#back-nav .nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-back-dash').classList.add('active');
+  document.getElementById('nav-back-dash').setAttribute('aria-current','page');
+  loadPipelineStatus();
+}
+function exitBack() {
+  isBack = false;
+  document.getElementById('front-nav').style.display = 'flex';
+  document.getElementById('back-nav').style.display = 'none';
+  document.getElementById('lock-btn').textContent = '🔒';
+  document.getElementById('back-indicator').style.display = 'none';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('#front-nav .nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-home').classList.add('active');
+  document.getElementById('nav-home').setAttribute('aria-current','page');
+}
+function changePasscode() {
+  const n = document.getElementById('pc-new').value;
+  const c = document.getElementById('pc-confirm').value;
+  const msg = document.getElementById('pc-change-msg');
+  if (n.length !== 6 || !/^\d+$/.test(n)) {
+    msg.textContent = 'Passcode must be exactly 6 digits'; msg.className = 'form-msg error'; return;
+  }
+  if (n !== c) { msg.textContent = 'Passcodes do not match'; msg.className = 'form-msg error'; return; }
+  PC = n; store.set('lms_pc', n);
+  msg.textContent = 'Passcode updated successfully'; msg.className = 'form-msg success';
+  document.getElementById('pc-new').value = '';
+  document.getElementById('pc-confirm').value = '';
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('#page-wrap .page').forEach(p => { if (!p.id.startsWith('page-back')) p.classList.remove('active'); });
+  document.querySelectorAll('#front-nav .nav-btn').forEach(b => { b.classList.remove('active'); b.removeAttribute('aria-current'); });
+  const p = document.getElementById('page-'+tab);
+  const n = document.getElementById('nav-'+tab);
+  if (p) { p.classList.add('active'); document.getElementById('page-wrap').scrollTop = 0; }
+  if (n) { n.classList.add('active'); n.setAttribute('aria-current','page'); }
+  if (tab === 'calendar') renderCalendar();
+}
+function switchBackTab(tab) {
+  document.querySelectorAll('#page-wrap .page').forEach(p => { if (p.id.startsWith('page-back')) p.classList.remove('active'); });
+  document.querySelectorAll('#back-nav .nav-btn').forEach(b => { b.classList.remove('active'); b.removeAttribute('aria-current'); });
+  const p = document.getElementById('page-back-'+tab);
+  const n = document.getElementById('nav-back-'+tab);
+  if (p) { p.classList.add('active'); document.getElementById('page-wrap').scrollTop = 0; }
+  if (n) { n.classList.add('active'); n.setAttribute('aria-current','page'); }
+}
+
+// ── MODALS ────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── FRAMEWORK DETAIL ─────────────────────────────────────
+const FW = {
+  spectrum: {
+    name: 'SPECTRUM',
+    desc: 'Physical and Digital Accessibility Audits',
+    body: `<p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.6">SPECTRUM covers the full range of accessibility — from the physical built environment to every pixel of your digital presence.</p>
+    <div class="card"><div class="card-title">Physical Audits</div><div class="card-desc">ADA Standards for Accessible Design. Accessible routes, parking, restrooms, entrances, service counters, signage, and emergency systems. On-site assessment with documented findings.</div></div>
+    <div class="card"><div class="card-title">Digital Audits</div><div class="card-desc">WCAG 2.1 Level AA. Websites, mobile apps, PDFs, Word documents, PowerPoint files, kiosks, and ATMs. Automated scanning plus full manual keyboard and screen reader testing.</div></div>
+    <div class="card"><div class="card-title">The Deliverable</div><div class="card-desc">A complete findings report with prioritized recommendations, legal exposure summary, and an implementation roadmap your team can actually follow.</div></div>
+    <button class="cta-btn" style="margin-top:8px" onclick="closeModal('fw-modal');openIntake()">Request SPECTRUM Audit</button>`,
+  },
+  prism: {
+    name: 'PRISM',
+    desc: 'Organizational Inclusion Consulting',
+    body: `<p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.6">PRISM assesses your organization from the inside — policies, culture, hiring, and the lived experience of disabled employees and constituents.</p>
+    <div class="card"><div class="card-title">Culture Audit</div><div class="card-desc">Is your organization approaching disability as a design problem (social model) or a personal deficit (medical model)? PRISM measures the gap and closes it.</div></div>
+    <div class="card"><div class="card-title">Policy Review</div><div class="card-desc">Accommodation processes, HR policies, hiring practices, and internal communications reviewed against legal standards and best practice.</div></div>
+    <div class="card"><div class="card-title">Gap Analysis</div><div class="card-desc">A before-and-after comparison showing exactly where your organization stands and the specific changes that will move the needle.</div></div>
+    <button class="cta-btn" style="margin-top:8px" onclick="closeModal('fw-modal');openIntake()">Request PRISM Assessment</button>`,
+  },
+  illuminate: {
+    name: 'ILLUMINATE',
+    desc: 'Staff Education and Curriculum Development',
+    body: `<p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.6">ILLUMINATE turns compliance knowledge into genuine competence — for your staff, your partners, and the people you serve.</p>
+    <div class="card"><div class="card-title">The MATCH Framework</div><div class="card-desc">Mismatch in Design · All-Inclusive Spectrum · Tragedy and Sickness Myth · Context-Dependent · Holistic Capabilities. A memorable training foundation for any audience.</div></div>
+    <div class="card"><div class="card-title">Curriculum Development</div><div class="card-desc">Custom training materials, certification study booklets, and learning objectives built for your specific sector and audience. All materials are themselves fully accessible.</div></div>
+    <div class="card"><div class="card-title">Continuing Education</div><div class="card-desc">Ten-course certification program covering all core areas of accessibility practice from legal foundations through advanced auditing methodology.</div></div>
+    <button class="cta-btn" style="margin-top:8px" onclick="closeModal('fw-modal');openIntake()">Request ILLUMINATE Training</button>`,
+  },
+  radiance: {
+    name: 'RADIANCE™',
+    desc: 'Events and Public Access Consulting',
+    body: `<p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.6">RADIANCE moves through eight points of every event and public access experience — from the moment someone registers to the moment they evacuate safely.</p>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+      ${['R — Reach and Registration','A — Arrival and Approach','D — Design of Space','I — Information and Communication','A — Amenities and Services','N — Navigation and Wayfinding','C — Content and Programming','E — Emergency and Evacuation'].map(s=>`<div style="background:var(--navy);border-left:2px solid var(--gold);padding:8px 10px;font-size:13px;color:var(--white)">${s}</div>`).join('')}
+    </div>
+    <div class="card"><div class="card-title">Discovery Session</div><div class="card-desc">Starting at $2,500. One RADIANCE Discovery Session covers a complete pre-event assessment with documented findings and a remediation roadmap.</div></div>
+    <button class="cta-btn" style="margin-top:8px" onclick="closeModal('fw-modal');openIntake()">Request RADIANCE Audit</button>`,
+  },
+  lumen: {
+    name: 'LUMEN Protocol',
+    desc: 'Global Accessibility and Government Engagement',
+    body: `<p style="color:var(--gray);font-size:13px;margin-bottom:16px;line-height:1.6">The LUMEN Protocol is the fifth WE-ILUMINATE LLC framework — a global accessibility assessment and cross-border engagement system for governments, international organizations, and entities operating across multiple jurisdictions.</p>
+    <div class="card"><div class="card-title">Cross-Border Assessment</div><div class="card-desc">Accessibility frameworks across eleven international jurisdictions. Comparing standards, identifying gaps, and building compliance roadmaps for organizations operating globally.</div></div>
+    <div class="card"><div class="card-title">Government Engagement</div><div class="card-desc">Policy consultation, legislative review, and accessibility standard development for federal, state, and international bodies.</div></div>
+    <div class="card"><div class="card-title">The Human Cost</div><div class="card-desc">The LUMEN Protocol powers The Human Cost database — a live global accountability record of documented unnatural deaths. Lighting the path to accountability.</div></div>
+    <button class="cta-btn" style="margin-top:8px" onclick="closeModal('fw-modal');openIntake()">Inquire About LUMEN Protocol</button>`,
+  },
+};
+function openFW(id) {
+  const fw = FW[id]; if (!fw) return;
+  document.getElementById('fw-modal-title').textContent = fw.name + ' — ' + fw.desc;
+  document.getElementById('fw-modal-body').innerHTML = fw.body;
+  openModal('fw-modal');
+}
+
+// ── INTAKE FORM ───────────────────────────────────────────
+function openIntake() { openModal('intake-modal'); }
+async function submitIntake(e) {
+  e.preventDefault();
+  const btn = document.getElementById('intake-submit');
+  const msg = document.getElementById('intake-msg');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  const data = new FormData(e.target);
+  try {
+    const res = await fetch('https://formspree.io/f/xwlegqon', {
+      method: 'POST', body: data, headers: { Accept: 'application/json' }
+    });
+    if (res.ok) {
+      msg.textContent = 'Your consultation request has been sent. You will receive a response within 2 business days. XOXO — Shar 💋';
+      msg.className = 'form-msg success';
+      e.target.reset();
+    } else {
+      throw new Error();
+    }
+  } catch {
+    msg.textContent = 'Something went wrong. Please email SharleisDunn@outlook.com directly.';
+    msg.className = 'form-msg error';
+  }
+  btn.disabled = false; btn.textContent = 'Send Consultation Request';
+}
+
+// ── APERTURE SUBMIT ───────────────────────────────────────
+function submitAperture(e) {
+  e.preventDefault();
+  const reviews = JSON.parse(store.get('lms_reviews') || '[]');
+  const form = e.target;
+  const rev = {
+    id: Date.now(),
+    framework: form.framework.value,
+    location: form.location.value,
+    date: form.date.value,
+    rating: form.rating.value,
+    summary: form.summary.value,
+    public: form.public.checked,
+    created: new Date().toISOString(),
+  };
+  reviews.unshift(rev);
+  store.set('lms_reviews', JSON.stringify(reviews));
+  const msg = document.getElementById('aperture-msg');
+  msg.textContent = 'Review saved.' + (rev.public ? ' Marked as public — will appear in the public portal.' : ' Saved as private.');
+  msg.className = 'form-msg success';
+  form.reset();
+  loadPublicReviews();
+}
+function loadPublicReviews() {
+  const reviews = JSON.parse(store.get('lms_reviews') || '[]').filter(r => r.public);
+  const el = document.getElementById('aperture-reviews');
+  if (!el) return;
+  if (reviews.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--gray);font-style:italic">No public reviews published yet.</div>';
+    return;
+  }
+  const colors = { 'Fully Accessible':'var(--green)','Partially Accessible':'var(--gold)','Barriers Identified':'var(--red)','Critical Failures':'var(--red)' };
+  el.innerHTML = reviews.map(r => `
+    <div style="background:rgba(10,14,42,.6);border-left:2px solid ${colors[r.rating]||'var(--gold)'};padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:8px">
+      <div style="font-size:9px;color:var(--gray);font-family:monospace">${r.framework} · ${r.date}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin:2px 0">${r.location}</div>
+      <div style="font-size:10px;font-weight:700;color:${colors[r.rating]||'var(--gold)'}">${r.rating}</div>
+      ${r.summary ? `<div style="font-size:12px;color:var(--gray);margin-top:4px;line-height:1.5">${r.summary}</div>` : ''}
+    </div>`).join('');
+}
+
+// ── LIVE COUNTER ──────────────────────────────────────────
+async function loadCounter() {
+  const ep = store.get('lms_ep_hc') ||
+    'https://raw.githubusercontent.com/sharleisd-a11y/wei-human-cost-data/main/humanCostDatabase.json';
+  try {
+    const res = await fetch(ep + '?t=' + Date.now());
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error();
+    const total = data.reduce((s,c) => {
+      const m = c.name && c.name.match(/[\d,]+/);
+      return s + (m ? parseInt(m[0].replace(/,/g,'')) : 1);
+    }, 0);
+    animateCounter(total);
+    document.getElementById('status-msg').textContent =
+      'Live · ' + data.length + ' documented cases · ' + total.toLocaleString() + '+ lives';
+    document.getElementById('pipeline-status') &&
+      (document.getElementById('pipeline-status').textContent =
+        data.length + ' records · Last entry: ' + (data[data.length-1]?.name || '—'));
+    document.getElementById('hc-admin-status') &&
+      (document.getElementById('hc-admin-status').textContent =
+        data.length + ' records in live database · Total lives: ' + total.toLocaleString() + '+');
+    store.set('lms_count', total);
+  } catch {
+    const cached = store.get('lms_count');
+    if (cached) animateCounter(parseInt(cached));
+    else document.getElementById('counter-num').textContent = '13,000+';
+    document.getElementById('status-msg').textContent =
+      'Showing cached data · Connect GitHub endpoint in System settings';
+  }
+}
+function animateCounter(target) {
+  const el = document.getElementById('counter-num');
+  let current = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = Math.floor(current).toLocaleString() + '+';
+    if (current >= target) clearInterval(timer);
+  }, 25);
+}
+
+// ── PIPELINE STATUS ───────────────────────────────────────
+async function loadPipelineStatus() {
+  const ep = store.get('lms_ep_hc') ||
+    'https://raw.githubusercontent.com/sharleisd-a11y/wei-human-cost-data/main/humanCostDatabase.json';
+  try {
+    const res = await fetch(ep + '?t=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      if (document.getElementById('pipeline-status'))
+        document.getElementById('pipeline-status').textContent =
+          '✓ Live · ' + (Array.isArray(data) ? data.length : '?') + ' records · Pipeline active';
+    }
+  } catch {
+    if (document.getElementById('pipeline-status'))
+      document.getElementById('pipeline-status').textContent =
+        'Set GitHub endpoint in System tab to connect live pipeline';
+  }
+}
+
+// ── HUMAN COST LINK ───────────────────────────────────────
+function openHumanCost() {
+  window.open('https://sharleisd-a11y.github.io/wei-human-cost-data', '_blank', 'noopener');
+}
+
+// ── CALENDAR ─────────────────────────────────────────────
+const SAMPLE_EVENTS = [
+  { date: '2026-09-30', name: 'Benefits Counselor Consultation Deadline', category: 'Admin', desc: 'Required before any business revenue begins.' },
+  { date: '2026-10-01', name: 'MyTax.DC.gov Entity Classification Deadline', category: 'Legal', desc: 'Washington DC entity compliance.' },
+  { date: '2026-10-25', name: 'Holiday Wayfinder Departure', category: 'Travel', desc: 'Departing Fayetteville AR for Marshall TX.' },
+  { date: '2026-12-22', name: 'DHS Trusted Tester Exam', category: 'Credentials', desc: 'Section 508 certification exam.' },
+  { date: '2026-12-31', name: 'SAM.gov Registration Deadline', category: 'Legal', desc: 'Federal contracting registration.' },
+];
+let calYear = 2026, calMonth = 8; // 0-indexed: 8 = September
+function renderCalendar() {
+  const container = document.getElementById('calendar-container');
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const today = new Date();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const catColors = { 'Admin':'var(--gold)','Legal':'var(--red)','Travel':'var(--green)','Credentials':'#9B6DFF','Personal':'var(--gray)' };
+
+  const eventDates = new Set(SAMPLE_EVENTS
+    .filter(e => { const d = new Date(e.date); return d.getFullYear()===calYear && d.getMonth()===calMonth; })
+    .map(e => new Date(e.date).getDate()));
+
+  let html = `<div class="cal-month">
+    <button class="cal-nav" onclick="calPrev()" aria-label="Previous month">‹</button>
+    <div class="cal-title">${monthNames[calMonth]} ${calYear}</div>
+    <button class="cal-nav" onclick="calNext()" aria-label="Next month">›</button>
+  </div>
+  <div class="cal-grid" role="grid" aria-label="Calendar for ${monthNames[calMonth]} ${calYear}">
+    ${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-day-header" role="columnheader">${d}</div>`).join('')}`;
+
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day other-month" aria-hidden="true"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+    const hasEv = eventDates.has(d);
+    html += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="scrollToDate(${d})" role="gridcell" aria-label="${monthNames[calMonth]} ${d}${hasEv?', has events':''}">${d}</div>`;
+  }
+  html += `</div>`;
+
+  const monthEvents = SAMPLE_EVENTS.filter(e => {
+    const d = new Date(e.date);
+    return d.getFullYear()===calYear && d.getMonth()===calMonth;
+  });
+
+  html += `<div class="cal-events" id="cal-events-list">`;
+  if (monthEvents.length === 0) {
+    html += `<div style="font-size:13px;color:var(--gray);text-align:center;padding:20px">No events this month</div>`;
+  } else {
+    monthEvents.forEach(ev => {
+      const d = new Date(ev.date);
+      const col = catColors[ev.category] || 'var(--gold)';
+      html += `<div class="event-item" id="ev-${d.getDate()}" style="border-left-color:${col}">
+        <div class="event-date">${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}</div>
+        <div class="event-name">${ev.name}</div>
+        <div class="event-desc">${ev.desc}</div>
+      </div>`;
+    });
+  }
+  html += `</div>`;
+  container.innerHTML = html;
+}
+function calPrev() {
+  calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+function calNext() {
+  calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+function scrollToDate(d) {
+  const el = document.getElementById('ev-'+d);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── ENDPOINTS ─────────────────────────────────────────────
+function saveEndpoint(key) {
+  const val = document.getElementById('ep-'+key).value.trim();
+  if (val) { store.set('lms_ep_'+key, val); alert('Endpoint saved.'); }
+}
+function loadEndpointInputs() {
+  ['hc','cal','apt'].forEach(k => {
+    const v = store.get('lms_ep_'+k);
+    const el = document.getElementById('ep-'+k);
+    if (v && el) el.value = v;
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  loadCounter();
+  loadPublicReviews();
+  loadEndpointInputs();
+  calYear = new Date().getFullYear();
+  calMonth = new Date().getMonth();
+  renderCalendar();
+});
+
+// Keyboard: close modals on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    if (document.getElementById('passcode-screen').classList.contains('open')) closePc();
+  }
+});
+</script>
+</body>
+</html>
